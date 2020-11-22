@@ -12,19 +12,19 @@ export class CategoryService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getCategoryHierarchy() : Observable<Category[]> {
-      let apiURL = environment.baseUrl + '/api/v1/category/?store=' + environment.merchant + '&filter=[visible]';
-       console.log('loading category hierarchy');
+  getCategoryHierarchy(): Observable<Category[]> {
+      const apiURL = environment.baseUrl + '/api/v1/category/?store=' + environment.merchant + '&filter=[visible]';
+      console.log('loading category hierarchy');
       return this.httpClient.get(apiURL)
         .pipe(
-          map((data:Category[]) => {return data as Category[]}),
+          map((data: Category[]) => {return data as Category[]}),
           catchError(err => {
-            //find a geberic error management page
+            // find a geberic error management page
             console.error(err.message);
-            console.log("Error is handled");
-            return throwError("Error thrown from catchError");
+            console.log('Error is handled');
+            return throwError('Error thrown from catchError');
           })
-      )
+      );
   }
 
   handleError() {

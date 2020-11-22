@@ -11,7 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class SearchResultComponent implements OnInit {
   showGrid: Boolean = false;
   show_product: any = 10;
-  totalRecord: Number = 0;
+  totalRecord: number = 0;
   searchResult: Array<any> = [];
   categoryFactes: Array<any> = [];
 

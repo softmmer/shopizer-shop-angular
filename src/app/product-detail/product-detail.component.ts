@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Options } from 'ng5-slider';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { NgbRatingConfig } from '@ng-bootstrap/ng-bootstrap';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute } from '@angular/router';
 import { AppService } from '../directive/app.service';
 import { Action } from '../directive/app.constants';
 import { Router } from '@angular/router';
@@ -18,11 +18,11 @@ import * as moment from 'moment';
   providers: [NgbRatingConfig]
 })
 export class ProductDetailComponent implements OnInit {
-  //@Input() productDetails: any[];
+  // @Input() productDetails: any[];
 
 
   config = {
-    displayKey: "name", //if objects array passed which key to be displayed defaults to description
+    displayKey: 'name', // if objects array passed which key to be displayed defaults to description
     search: false,
     // limitTo: 5,
     height: '135px',
@@ -38,7 +38,7 @@ export class ProductDetailComponent implements OnInit {
   review = {
     description: '',
     rate: 0
-  }
+  };
   // minValue: number = 22;
   // maxValue: number = 77;
   options: Options = {
@@ -70,7 +70,7 @@ export class ProductDetailComponent implements OnInit {
       }
     },
     nav: false
-  }
+  };
   productId: any;
   galleryImages: Array<any> = [];
   constructor(
@@ -86,35 +86,35 @@ export class ProductDetailComponent implements OnInit {
     config.max = 5;
     // config.readonly = true;
     this.route.queryParams.subscribe(params => {
-      console.log(params)
+      console.log(params);
       this.productId = params.productId;
 
-      let userData = JSON.parse(localStorage.getItem('userData'));
+      const userData = JSON.parse(localStorage.getItem('userData'));
       if (userData) {
-        this.auth = true
+        this.auth = true;
       } else {
-        this.auth = false
+        this.auth = false;
       }
       // this.auth = this.cookieService.get('auth');
       // console.log(this.auth);
       // console.log(params.get("id"))
-    })
+    });
   }
 
   ngOnInit() {
-    this.getProductDetails()
+    this.getProductDetails();
   }
   getProductDetails() {
     this.spinnerService.show();
-    let action = Action.PRODUCT;
+    const action = Action.PRODUCT;
 
     this.appService.getMethod(action + this.productId + '?lang=en')
       .subscribe(data => {
         console.log(data);
         this.productDetail = data;
         data.images.map((image) => {
-          this.galleryImages.push({ 'small': image.imageUrl, 'medium': image.imageUrl, 'big': image.imageUrl })
-        })
+          this.galleryImages.push({ small: image.imageUrl, medium: image.imageUrl, big: image.imageUrl });
+        });
         data.options.map((value) => {
           if (value.code == 'SIZE') {
             value.optionValues.map((size) => {
@@ -124,7 +124,7 @@ export class ProductDetailComponent implements OnInit {
                 this.selectedSizeID = size.id;
 
               }
-            })
+            });
           } else if (value.code == 'COLOR') {
             value.optionValues.map((size) => {
               if (size.defaultValue) {
@@ -132,22 +132,22 @@ export class ProductDetailComponent implements OnInit {
                 this.selectedColor = size.id;
 
               }
-            })
+            });
           }
         });
 
       }, error => {
         // this.router.navigate(['/error']);
       });
-    this.getRelatedProduct()
+    this.getRelatedProduct();
     this.getReview();
   }
   onChangeSize(event) {
-    this.selectedSize = event.value.name
-    this.selectedSizeID = event.value.id
+    this.selectedSize = event.value.name;
+    this.selectedSizeID = event.value.id;
   }
   getRelatedProduct() {
-    let action = Action.PRODUCTS;
+    const action = Action.PRODUCTS;
     this.appService.getMethod(action + this.productId + '/related')
       .subscribe(data => {
         console.log(data);
@@ -160,9 +160,9 @@ export class ProductDetailComponent implements OnInit {
   }
   handleChange(event, color, productID, option) {
     // console.log(event);
-    this.selectedColor = color.id
-    let action = Action.PRODUCTS + productID + '/variant';
-    let param = { "options": [{ "option": option.id, "value": color.id }] }
+    this.selectedColor = color.id;
+    const action = Action.PRODUCTS + productID + '/variant';
+    const param = { options: [{ option: option.id, value: color.id }] };
     this.appService.postMethod(action, param)
       .subscribe(data => {
         console.log(data);
@@ -173,7 +173,7 @@ export class ProductDetailComponent implements OnInit {
   addToCart(product) {
     this.spinnerService.show();
 
-    let userData = JSON.parse(localStorage.getItem('userData'));
+    const userData = JSON.parse(localStorage.getItem('userData'));
     let action;
     // let action = Action.CART;
     // let param = {
@@ -186,11 +186,11 @@ export class ProductDetailComponent implements OnInit {
 
     // }
     if (this.cookieService.get('shopizer-cart-id')) {
-      action = Action.CART
-      let cartData = JSON.parse(this.cookieService.get('localCart'));
-      let index = cartData.findIndex(order => order.id === product.id);
-      let param = { "product": product.id, "quantity": index == -1 ? 1 : cartData[index].quantity + 1 }
-      let id = this.cookieService.get('shopizer-cart-id');
+      action = Action.CART;
+      const cartData = JSON.parse(this.cookieService.get('localCart'));
+      const index = cartData.findIndex(order => order.id === product.id);
+      const param = { product: product.id, quantity: index == -1 ? 1 : cartData[index].quantity + 1 };
+      const id = this.cookieService.get('shopizer-cart-id');
       this.appService.putMethod(action, id, param)
         .subscribe(data => {
           this.spinnerService.hide();
@@ -202,9 +202,9 @@ export class ProductDetailComponent implements OnInit {
       if (userData) {
         action = Action.CUSTOMERS + userData.id + '/' + Action.CARTS;
       } else {
-        action = Action.CART
+        action = Action.CART;
       }
-      let param = { "product": product.id, "quantity": 1 }
+      const param = { product: product.id, quantity: 1 };
       this.appService.postMethod(action, param)
         .subscribe(data => {
           console.log(data);
@@ -226,7 +226,7 @@ export class ProductDetailComponent implements OnInit {
     }
   }
   getReview() {
-    let action = Action.PRODUCTS + this.productId + '/reviews';
+    const action = Action.PRODUCTS + this.productId + '/reviews';
     this.appService.getMethod(action)
       .subscribe(data => {
         console.log(data);
@@ -242,25 +242,25 @@ export class ProductDetailComponent implements OnInit {
   }
   onSubmitReview(productID) {
     this.spinnerService.show();
-    let userData = JSON.parse(localStorage.getItem('userData'));
-    let action = Action.AUTH + Action.PRODUCTS + productID + '/reviews'
-    let param = { "customerId": userData.id, "date": moment().format('YYYY-MM-DD'), "description": this.review.description, 'language': 'en', 'productId': productID, 'rating': this.review.rate }
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    const action = Action.AUTH + Action.PRODUCTS + productID + '/reviews';
+    const param = { customerId: userData.id, date: moment().format('YYYY-MM-DD'), description: this.review.description, language: 'en', productId: productID, rating: this.review.rate };
     this.appService.postMethod(action, param)
       .subscribe(data => {
         this.toastr.success('Your review has been posted', 'Well done!');
         this.review = {
           description: '',
           rate: 0
-        }
+        };
         this.spinnerService.hide();
-        this.getReview()
+        this.getReview();
       }, error => {
         this.review = {
           description: '',
           rate: 0
-        }
+        };
         this.spinnerService.hide();
-        this.toastr.error("A review already exist for this customer and product", "")
+        this.toastr.error('A review already exist for this customer and product', '');
       });
   }
 

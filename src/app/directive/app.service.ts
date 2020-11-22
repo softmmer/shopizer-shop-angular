@@ -12,7 +12,7 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class AppService {
     url = '';
-    constructor(private http: Http) { 
+    constructor(private http: Http) {
         this.url = environment.baseUrl + environment.apiVersion;
     }
     postMethod(action, requestJSON) {
@@ -26,7 +26,7 @@ export class AppService {
         );
     }
     createAuthorizationHeader(headers: Headers) {
-        let userData = JSON.parse(localStorage.getItem('userData'))
+        const userData = JSON.parse(localStorage.getItem('userData'))
         if (userData) {
             headers.append('Authorization', 'Bearer ' + userData.token);
         }
@@ -70,8 +70,8 @@ export class AppService {
     }
 
     private extractData(res: Response) {
-        let body = res.json();
-        return body
+        const body = res.json();
+        return body;
     }
     private handleErrorObservable(error: Response | any) {
 
@@ -81,4 +81,4 @@ export class AppService {
         console.error(error);
         return Promise.reject(error.message || error);
     }
-} 
+}

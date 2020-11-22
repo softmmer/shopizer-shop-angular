@@ -26,9 +26,9 @@ export class RegisterComponent implements OnInit {
     username: '',
     password: '',
     confirmPassword: ''
-  }
+  };
   config = {
-    displayKey: "name", //if objects array passed which key to be displayed defaults to description
+    displayKey: 'name', // if objects array passed which key to be displayed defaults to description
     search: false,
     height: '300px',
   };
@@ -44,15 +44,15 @@ export class RegisterComponent implements OnInit {
     phone: '',
     countryCode: '',
     zone: ''
-  }
+  };
   stateData: Array<any> = [];
   countryData: Array<any> = [];
   ngOnInit() {
-    this.getCountry()
+    this.getCountry();
   }
 
   getCountry() {
-    let action = Action.COUNTRY;
+    const action = Action.COUNTRY;
     this.appService.getMethod(action)
       .subscribe(data => {
         this.countryData = data;
@@ -83,50 +83,51 @@ export class RegisterComponent implements OnInit {
   //     });
   // }
   onRegister() {
+    console.log('onRegister');
     this.spinnerService.show();
-    let action = Action.CUSTOMER + Action.REGISTER;
-    let param = {
-      "userName": this.register.username,
-      "password": this.register.password,
-      "emailAddress": this.register.username,
-      "gender": "F",
-      "language": "en",
-      "billing": {
-        "country": this.billing.countryCode,
-        "zone": this.billing.zone,
-        "stateProvince": this.billing.stateProvince,
-        "firstName": this.billing.firstName,
-        "lastName": this.billing.lastName,
+    const action = Action.CUSTOMER + Action.REGISTER;
+    const param = {
+      userName: this.register.username,
+      password: this.register.password,
+      emailAddress: this.register.username,
+      gender: 'M',
+      language: 'en',
+      billing: {
+        country: this.billing.countryCode,
+        zone: this.billing.zone,
+        stateProvince: this.billing.stateProvince,
+        firstName: this.billing.firstName,
+        lastName: this.billing.lastName,
       }
-    }
+    };
     this.appService.postMethod(action, param)
       .subscribe(data => {
-        console.log(data);
+        console.log('Data: ' + data);
         this.spinnerService.hide();
         this.router.navigate(['/orders']);
         localStorage.setItem('userData', JSON.stringify(data));
         this.toastr.success('You have successfully registerd in to this site.', 'Congratulation');
       }, error => {
-        console.log(error);
+        console.log('Error: ' + error);
         this.spinnerService.hide();
         this.toastr.error('Registering customer user already exist');
-        console.log('user')
+        console.log('user');
       });
   }
   getCurrentLocation() {
-    let me = this;
-    this.helper.getLocation(function (result, error) {
+    const me = this;
+    this.helper.getLocation(function(result, error) {
       if (error) {
-        //console.log(error)
+        // console.log(error)
       } else {
         // console.log(result)
-        me.billing.countryCode = result.find(i => i.types.some(i => i == "country")).short_name;
-        me.billing.country = result.find(i => i.types.some(i => i == "country")).long_name;
-        me.billing.stateProvince = result.find(i => i.types.some(i => i == "administrative_area_level_1")).long_name;
-        me.billing.zone = result.find(i => i.types.some(i => i == "administrative_area_level_1")).short_name;
+        me.billing.countryCode = result.find(i => i.types.some(i => i == 'country')).short_name;
+        me.billing.country = result.find(i => i.types.some(i => i == 'country')).long_name;
+        me.billing.stateProvince = result.find(i => i.types.some(i => i == 'administrative_area_level_1')).long_name;
+        me.billing.zone = result.find(i => i.types.some(i => i == 'administrative_area_level_1')).short_name;
         // console.log(me.checkout.country);
       }
-    })
+    });
 
   }
 

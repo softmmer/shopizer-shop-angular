@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  //baseUrl: 'http://99.79.1.102:8080',
+  // baseUrl: 'http://99.79.1.102:8080',
   baseUrl: 'http://localhost:8080',
   apiVersion: '/api/v1/',
   merchant: 'DEFAULT',
